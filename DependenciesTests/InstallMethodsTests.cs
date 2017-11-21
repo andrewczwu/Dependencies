@@ -90,16 +90,11 @@ namespace Dependencies.Tests
         [TestMethod()]
         public void DetectDepends_True()
         {
+            var NodeA = new InstallNode("NodeA");            
             var NodeB = new InstallNode ("NodeB");
-                       
-            var NodeAChildA = new InstallNode ("NodeAChildA");
-            var NodeAChildB = new InstallNode("NodeAChildB");
-            NodeAChildB.Dependents.Add(NodeB);
-            var NodeAChildC = new InstallNode ( "NodeAChildC");
-            var NodeA = new InstallNode("NodeA");
-            NodeA.Dependents.Add(NodeAChildA);
-            NodeA.Dependents.Add(NodeAChildB);
-            NodeA.Dependents.Add(NodeAChildC);
+            NodeA.DependsOn.Add(NodeB);
+            NodeB.DependsOn.Add(NodeA);
+
             var resp = InstallMethods.DetectDepends(NodeA, NodeB);
             Assert.IsTrue(resp);
         }
@@ -107,16 +102,11 @@ namespace Dependencies.Tests
         [TestMethod()]
         public void DetectDepends_None_False()
         {
+            var NodeA = new InstallNode("NodeA");
             var NodeB = new InstallNode("NodeB");
             var NodeC = new InstallNode("NodeC");
-            var NodeAChildA = new InstallNode("NodeAChildA");
-            var NodeAChildB = new InstallNode("NodeAChildB");
-            NodeAChildB.Dependents.Add(NodeC);
-            var NodeAChildC = new InstallNode("NodeAChildC");
-            var NodeA = new InstallNode("NodeA");
-            NodeA.Dependents.Add(NodeAChildA);
-            NodeA.Dependents.Add(NodeAChildB);
-            NodeA.Dependents.Add(NodeAChildC);
+            NodeA.DependsOn.Add(NodeC);
+            NodeB.DependsOn.Add(NodeC);
             var resp = InstallMethods.DetectDepends(NodeA, NodeB);
             Assert.IsFalse(resp);
         }
